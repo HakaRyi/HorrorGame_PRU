@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "764241948203",
+    "firebase_url": "https://hospital-escape-19f61-default-rtdb.asia-southeast1.firebasedatabase.app",
+    "project_id": "hospital-escape-19f61",
+    "storage_bucket": "hospital-escape-19f61.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:764241948203:android:0de2886c23237b8fb1c46e",
+        "android_client_info": {
+          "package_name": "com.GionLan.HospitalEscape"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDz62GFPTQB4ZpdJdWWeyK0N8zrHH4v-TI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
