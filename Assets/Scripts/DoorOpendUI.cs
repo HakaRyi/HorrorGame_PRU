@@ -5,9 +5,18 @@ public class DoorOpendUI : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void OnMouseOver()
     {
-        UIController.actionText = "Opend";
-        UIController.commandText = "E";
-        UIController.isActive = true;
+        if (PlayerCasting.distanceFromTarget < 5f)
+        {
+            UIController.actionText = "Opend";
+            UIController.commandText = "E";
+            UIController.isActive = true;
+        }
+        else
+        {
+            UIController.actionText = "";
+            UIController.commandText = "";
+            UIController.isActive = false;
+        }
     }
 
     private void OnMouseExit()
