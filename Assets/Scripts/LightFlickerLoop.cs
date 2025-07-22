@@ -15,7 +15,16 @@ public class LightFlickerLoop : MonoBehaviour
     }
     private void Awake()
     {
-        audioManager=GameObject.FindGameObjectWithTag("Audio").GetComponent<AudioManager>();
+        audioManager=GameObject.FindGameObjectWithTag("Audio")?.GetComponent<AudioManager>();
+        if (spotlight == null)
+        {
+            spotlight = GetComponent<Light>();
+            if (spotlight == null)
+            {
+                Debug.LogError("Light component not found on this GameObject!");
+                enabled = false; 
+            }
+        }
     }
 
     IEnumerator FlickerLoop()
