@@ -23,9 +23,7 @@ public class PickupSystem : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.E) && !isReading)
         {
             Ray ray = new Ray(cam.transform.position, cam.transform.forward);
-            RaycastHit hit;
-
-            if (Physics.Raycast(ray, out hit, interactDistance, pickableLayer))
+            if (Physics.Raycast(ray, out RaycastHit hit, interactDistance, pickableLayer))
             {
                 PickableObject pickable = hit.collider.GetComponent<PickableObject>();
                 if (pickable != null)
@@ -34,15 +32,14 @@ public class PickupSystem : MonoBehaviour
                     {
                         case ItemType.Note:
                             ShowItem(pickable);
-                            InventoryManager.Instance.AddItem(pickable);
                             break;
-
                         case ItemType.Key:
-                            InventoryManager.Instance.AddItem(pickable);
+                            Pickup(pickable);
+                            break;
+                        default:
+                            Pickup(pickable);
                             break;
                     }
-
-                    Destroy(hit.collider.gameObject); 
                 }
             }
         }
@@ -61,8 +58,14 @@ public class PickupSystem : MonoBehaviour
 
     
         Time.timeScale = 0;
+        InventoryManager.Instance.AddItem(item);
+        item.gameObject.SetActive(false);
     }
-
+    void Pickup(PickableObject item)
+    {
+        InventoryManager.Instance.AddItem(item);
+        item.gameObject.SetActive(false);
+    }
     public void CloseUI()
     {
         readPaperUI.SetActive(false);
