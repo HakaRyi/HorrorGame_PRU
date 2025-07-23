@@ -1,12 +1,17 @@
 using UnityEngine;
 
-
+public enum ItemType
+{
+    Note,
+    Key
+}
 public class PickableObject : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
     public Sprite itemSprite;
     [TextArea]
     public string itemDescription;
+    public string itemName;
+    public ItemType itemType;
 
     void Reset()
     {

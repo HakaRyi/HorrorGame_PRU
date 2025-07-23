@@ -9,8 +9,13 @@ public class UIController : MonoBehaviour
     [SerializeField] GameObject commandBox;
     [SerializeField] GameObject interactiveCross;
     // Update is called once per frame
+    void Start()
+    {
+        LockCursor();
+    }
     void Update()
     {
+
         if (isActive == true)
         {
             actionBox.SetActive(true);
@@ -25,5 +30,16 @@ public class UIController : MonoBehaviour
             commandBox.SetActive(false);
             interactiveCross.SetActive(false);
         }
+    }
+    public static void LockCursor()
+    {
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
+    }
+
+    public static void UnlockCursor()
+    {
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
     }
 }

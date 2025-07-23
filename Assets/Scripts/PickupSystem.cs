@@ -30,7 +30,18 @@ public class PickupSystem : MonoBehaviour
                 PickableObject pickable = hit.collider.GetComponent<PickableObject>();
                 if (pickable != null)
                 {
-                    ShowItem(pickable);
+                    switch (pickable.itemType)
+                    {
+                        case ItemType.Note:
+                            ShowItem(pickable);
+                            InventoryManager.Instance.AddItem(pickable);
+                            break;
+
+                        case ItemType.Key:
+                            InventoryManager.Instance.AddItem(pickable);
+                            break;
+                    }
+
                     Destroy(hit.collider.gameObject); 
                 }
             }
