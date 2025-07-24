@@ -2,13 +2,16 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class NewMonoBehaviourScript : MonoBehaviour
+public class DialogueManager : MonoBehaviour
 {
     public Text textBox;
     public float typingSpeed = 0.05f;
 
     private Coroutine typingCoroutine;
-
+    void Start()
+    {
+        UIController.LockCursor(); 
+    }
     public void ShowDialogue(string message)
     {
         if (typingCoroutine != null)

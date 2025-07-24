@@ -11,11 +11,13 @@ public class PickupSystem : MonoBehaviour
     
     private Camera cam;
     private bool isReading = false;
+    private AudioManager audioManager;
 
     void Start()
     {
         cam = Camera.main;
         readPaperUI.SetActive(false);
+        audioManager = GameObject.FindGameObjectWithTag("Audio")?.GetComponent<AudioManager>();
     }
 
     void Update()
@@ -32,9 +34,11 @@ public class PickupSystem : MonoBehaviour
                     {
                         case ItemType.Note:
                             ShowItem(pickable);
+                            audioManager?.PlaySFX(audioManager.paperPickupClip, audioManager.vfxAudioSource);
                             break;
                         case ItemType.Key:
                             Pickup(pickable);
+                            audioManager?.PlaySFX(audioManager.keyPickupClip, audioManager.vfxAudioSource);
                             break;
                         default:
                             Pickup(pickable);
@@ -43,7 +47,7 @@ public class PickupSystem : MonoBehaviour
                 }
             }
         }
-        else if (Input.GetKeyDown(KeyCode.Escape) && isReading)
+        else if (Input.GetKeyDown(KeyCode.E) && isReading)
         {
             CloseUI();
         }

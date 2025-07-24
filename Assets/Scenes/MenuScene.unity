@@ -3917,7 +3917,6 @@ MonoBehaviour:
   musicAudioSource: {fileID: 546281738}
   vfxAudioSource: {fileID: 1179806776}
   musicClips: {fileID: 8300000, guid: fca54a712c447474a914bbbb7a36a939, type: 3}
-  vfxClips: {fileID: 8300000, guid: bcc2eea4dae12304fb7e07978d001140, type: 3}
   buttonClickClip: {fileID: 8300000, guid: 6cbcd1e7d48f53040a3b79afd17261ea, type: 3}
 --- !u!4 &664294042
 Transform:
@@ -4642,6 +4641,7 @@ MonoBehaviour:
   flickerMin: 0.05
   flickerMax: 0.2
   steadyTime: 5
+  vfxClips: {fileID: 8300000, guid: bcc2eea4dae12304fb7e07978d001140, type: 3}
 --- !u!1 &735109512
 GameObject:
   m_ObjectHideFlags: 0

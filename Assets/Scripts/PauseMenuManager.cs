@@ -1,43 +1,46 @@
+using StarterAssets;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-public class MenuManager : MonoBehaviour
+public class PauseMenuManager : MonoBehaviour
 {
-    [Header("Main Panels")]
-    public GameObject mainMenuPanel;
+    [Header("UI Panels")]
+    public GameObject pauseMenuPanel;
     public GameObject settingPanel;
 
     [Header("Audio")]
     public AudioSource musicSource;
     public AudioSource sfxSource;
 
-    [Header("UI Texts")]
     public Text audioToggleText;
     public Text musicToggleText;
 
-    [Header("Sliders")]
     public Slider musicSlider;
     public Slider sfxSlider;
 
+    [Header("Player Control")]
+    public GameObject playerScripts; // Reference to the GameObject with FirstPersonController
+
+    private bool isPaused = false;
     private bool isMusicOn = true;
     private bool isAudioOn = true;
-    private AudioManager audioManager;
 
-    void Awake()
-    {
-        audioManager = GameObject.FindGameObjectWithTag("Audio")?.GetComponent<AudioManager>();
-    }
+    private AudioManager audioManager;
 
     void Start()
     {
-        mainMenuPanel.SetActive(true);
+        pauseMenuPanel.SetActive(false);
         settingPanel.SetActive(false);
-        // Load audio settings from PlayerPrefs
+        audioManager = GameObject.FindGameObjectWithTag("Audio")?.GetComponent<AudioManager>();
+        if (playerScripts == null)
+            playerScripts = GameObject.FindGameObjectWithTag("Player"); // Find player if not assigned
+
         musicSource.volume = PlayerPrefs.GetFloat("MusicVolume", 1f);
         musicSource.mute = PlayerPrefs.GetInt("MusicMute", 0) == 1;
         sfxSource.volume = PlayerPrefs.GetFloat("SFXVolume", 1f);
         sfxSource.mute = PlayerPrefs.GetInt("SFXMute", 0) == 1;
+
         // Initialize audio states based on AudioSource
         isMusicOn = !musicSource.mute;
         isAudioOn = !sfxSource.mute || !musicSource.mute;
@@ -68,41 +71,69 @@ public class MenuManager : MonoBehaviour
         audioToggleText.text = "AUDIO: " + (isAudioOn ? "ON" : "OFF");
     }
 
-    // ----- New Game button -----
-    public void OnNewGameButton()
+    void Update()
     {
-        audioManager?.PlaySFX(audioManager.buttonClickClip, sfxSource);
-        SceneManager.LoadScene("SampleScene");
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            if (isPaused)
+                ResumeGame();
+            else
+                PauseGame();
+        }
     }
 
-    // ----- Quit button -----
-    public void OnQuitButton()
+    void PauseGame()
     {
-        audioManager?.PlaySFX(audioManager.buttonClickClip, sfxSource);
-        Application.Quit();
-
-#if UNITY_EDITOR
-        UnityEditor.EditorApplication.isPlaying = false;
-#endif
+        isPaused = true;
+        pauseMenuPanel.SetActive(true);
+        Time.timeScale = 0f;
+        UIController.UnlockCursor();
+        if (playerScripts != null)
+            playerScripts.GetComponent<FirstPersonController>().enabled = false; // Disable player controller
     }
 
-    // ----- Setting button -----
+    public void ResumeGame()
+    {
+        isPaused = false;
+        pauseMenuPanel.SetActive(false);
+        settingPanel.SetActive(false);
+        Time.timeScale = 1f;
+        UIController.LockCursor();
+        if (playerScripts != null)
+            playerScripts.GetComponent<FirstPersonController>().enabled = true; // Enable player controller
+        audioManager?.PlaySFX(audioManager.buttonClickClip, sfxSource);
+    }
+
+    public void BackToMenu()
+    {
+        Time.timeScale = 1f;
+        SceneManager.LoadScene("MenuScene");
+    }
+
     public void OnSettingButton()
     {
         audioManager?.PlaySFX(audioManager.buttonClickClip, sfxSource);
-        mainMenuPanel.SetActive(false);
+        pauseMenuPanel.SetActive(false);
         settingPanel.SetActive(true);
+        if (playerScripts != null)
+            playerScripts.GetComponent<FirstPersonController>().enabled = false; // Disable player controller in settings
     }
 
-    // ----- Back button from Setting to Main Menu -----
     public void OnBackButton()
     {
         audioManager?.PlaySFX(audioManager.buttonClickClip, sfxSource);
         settingPanel.SetActive(false);
-        mainMenuPanel.SetActive(true);
+        pauseMenuPanel.SetActive(true);
+        if (playerScripts != null)
+            playerScripts.GetComponent<FirstPersonController>().enabled = false; // Keep player controller disabled in pause menu
     }
 
-    // ----- Toggle ON/OFF Music -----
+    public void SaveGame()
+    {
+        Debug.Log("Game Saved! (implement your own save system here)");
+        audioManager?.PlaySFX(audioManager.buttonClickClip, sfxSource);
+    }
+
     public void ToggleMusic()
     {
         audioManager?.PlaySFX(audioManager.buttonClickClip, sfxSource);
@@ -115,24 +146,23 @@ public class MenuManager : MonoBehaviour
         PlayerPrefs.Save();
     }
 
-    // ----- Toggle ON OFF Audio -----
     public void ToggleAudio()
     {
         audioManager?.PlaySFX(audioManager.buttonClickClip, sfxSource);
         isAudioOn = !isAudioOn;
-        musicSource.mute = !isAudioOn;
         sfxSource.mute = !isAudioOn;
-        isMusicOn = isAudioOn;
-        musicSlider.value = isAudioOn ? sfxSlider.value : 0f;
+        musicSource.mute = !isAudioOn;
+        isMusicOn = isAudioOn; // Sync music state with audio
+        musicSlider.value = isAudioOn ? sfxSlider.value : 0f; // Sync music slider with audio
         sfxSlider.value = isAudioOn ? sfxSource.volume : 0f;
         UpdateMusicToggleText();
         UpdateAudioToggleText();
+
         PlayerPrefs.SetInt("MusicMute", musicSource.mute ? 1 : 0);
         PlayerPrefs.SetInt("SFXMute", sfxSource.mute ? 1 : 0);
         PlayerPrefs.Save();
     }
 
-    // ----- Adjust music via Slider -----
     public void SetMusicVolume(float value)
     {
         musicSource.volume = value;
@@ -145,7 +175,6 @@ public class MenuManager : MonoBehaviour
         PlayerPrefs.Save();
     }
 
-    // ----- Adjust SFX via Slider -----
     public void SetSFXVolume(float value)
     {
         sfxSource.volume = value;
