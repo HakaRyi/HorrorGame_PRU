@@ -35,6 +35,8 @@ public class PauseMenuManager : MonoBehaviour
         audioManager = GameObject.FindGameObjectWithTag("Audio")?.GetComponent<AudioManager>();
         if (playerScripts == null)
             playerScripts = GameObject.FindGameObjectWithTag("Player"); // Find player if not assigned
+        if (playerScripts == null)
+            Debug.LogWarning("PlayerScripts not assigned or found with tag 'Player'!");
 
         musicSource.volume = PlayerPrefs.GetFloat("MusicVolume", 1f);
         musicSource.mute = PlayerPrefs.GetInt("MusicMute", 0) == 1;
@@ -130,7 +132,23 @@ public class PauseMenuManager : MonoBehaviour
 
     public void SaveGame()
     {
-        Debug.Log("Game Saved! (implement your own save system here)");
+        if (playerScripts != null)
+        {
+            Vector3 playerPosition = playerScripts.transform.position;
+            PlayerPrefs.SetString("SavedScene", SceneManager.GetActiveScene().name);
+            PlayerPrefs.SetFloat("PlayerX", playerPosition.x);
+            PlayerPrefs.SetFloat("PlayerY", playerPosition.y);
+            PlayerPrefs.SetFloat("PlayerZ", playerPosition.z);
+            PlayerPrefs.Save();
+            // Verify save
+            string savedScene = PlayerPrefs.GetString("SavedScene", "");
+            float savedX = PlayerPrefs.GetFloat("PlayerX", 0f);
+            Debug.Log($"Game Saved! Scene: {savedScene}, Position: ({savedX}, {playerPosition.y}, {playerPosition.z})");
+        }
+        else
+        {
+            Debug.LogWarning("PlayerScripts not found! Save failed.");
+        }
         audioManager?.PlaySFX(audioManager.buttonClickClip, sfxSource);
     }
 

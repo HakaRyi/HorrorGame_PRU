@@ -3918,6 +3918,10 @@ MonoBehaviour:
   vfxAudioSource: {fileID: 1179806776}
   musicClips: {fileID: 8300000, guid: fca54a712c447474a914bbbb7a36a939, type: 3}
   buttonClickClip: {fileID: 8300000, guid: 6cbcd1e7d48f53040a3b79afd17261ea, type: 3}
+  paperPickupClip: {fileID: 8300000, guid: dd95e2ba55c35fa4a895a500a14b94fb, type: 3}
+  keyPickupClip: {fileID: 8300000, guid: ae5b97e2a54db9549938ecadb1099d3c, type: 3}
+  doorOpenClip: {fileID: 8300000, guid: 1c066bd939763b443906e50a5f632cb2, type: 3}
+  ghostSfxClip: {fileID: 8300000, guid: 96de5ceabe08deb45b2da37f40bed178, type: 3}
 --- !u!4 &664294042
 Transform:
   m_ObjectHideFlags: 0
@@ -5527,7 +5531,7 @@ GameObject:
   - component: {fileID: 888143393}
   - component: {fileID: 888143392}
   m_Layer: 5
-  m_Name: Button
+  m_Name: NewGame
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5660,7 +5664,7 @@ GameObject:
   - component: {fileID: 903173897}
   - component: {fileID: 903173896}
   m_Layer: 5
-  m_Name: Button (1)
+  m_Name: Continue
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5729,7 +5733,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 903173897}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1231053062}
+        m_TargetAssemblyTypeName: MenuManager, Assembly-CSharp
+        m_MethodName: OnContinueButton
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &903173897
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8090,7 +8106,7 @@ GameObject:
   - component: {fileID: 1186739262}
   - component: {fileID: 1186739261}
   m_Layer: 5
-  m_Name: Button (3)
+  m_Name: Quit
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -9399,7 +9415,7 @@ GameObject:
   - component: {fileID: 1357087916}
   - component: {fileID: 1357087915}
   m_Layer: 5
-  m_Name: Button (2)
+  m_Name: Setting
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
